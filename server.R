@@ -1,5 +1,7 @@
 library(shiny)
 
+bib <- readRDS("data/bibliography.rds")
+
 shinyServer(function(input, output) {
 
   output$distPlot <- renderPlot({
