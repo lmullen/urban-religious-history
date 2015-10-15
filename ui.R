@@ -4,6 +4,7 @@ library(leaflet)
 shinyUI(bootstrapPage(
 
   tags$head(
+    tags$title(our_title),
     tags$link(rel = "stylesheet", type = "text/css", href = "custom.css")
   ),
 
@@ -12,7 +13,7 @@ shinyUI(bootstrapPage(
   absolutePanel(
     id = "controls",
     bottom = 10, left = 10,
-    tags$h2("A Bibliography of Urban Religious History"),
+    tags$h2(our_title),
     sliderInput("year_published", "Year published",
                 min = year_range[1], max = year_range[2],
                 value = year_range, sep = "", round = TRUE, step = 1),
