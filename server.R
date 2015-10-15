@@ -2,7 +2,7 @@ library(shiny)
 library(leaflet)
 suppressMessages(library(dplyr))
 
-shinyServer(function(input, output) {
+shinyServer(function(input, output, session) {
 
   bib_selected <- reactive({
 
@@ -46,11 +46,40 @@ shinyServer(function(input, output) {
   output$bibtable <- renderDataTable({bib_for_table()}, server = FALSE)
 
   observe({
-    leafletProxy("map", data = bib_for_map()) %>%
+    df <- bib_for_map()
+
+    leafletProxy("map", data = df) %>%
       clearMarkers() %>%
-      addCircleMarkers(lng = ~lon, lat = ~lat, radius = ~sqrt(n) * 3,
-                       popup = ~paste0("<h4>", location, "</h4>", "<p>", book,
-                                       "</p>"))
+      clearPopups()
+
+    if (nrow(df) > 0) {
+      leafletProxy("map", data = df) %>%
+        addCircleMarkers(layerId = ~location, lng = ~lon, lat = ~lat,
+                         radius = ~sqrt(n) * 3)
+    }
+
+    if (nrow(df) == 1) {
+      leafletProxy("map", data = df) %>%
+        addPopups(~lon, ~lat, ~location, layerId = ~location)
+    }
+
+  })
+
+  # If a marker is clicked, return results for just that city
+  observeEvent(input$map_marker_click, {
+    event <- input$map_marker_click
+    updateSelectInput(session, "city_select", selected = event$id)
+  })
+
+  # If the map background is clicked, show all cities
+  observeEvent(input$map_click, {
+    updateSelectInput(session, "city_select", selected = "All cities")
+  })
+
+  # If the reset button is clicked, show all cities and years
+  observeEvent(input$reset_button, {
+    updateSelectInput(session, "city_select", selected = "All cities")
+    updateSliderInput(session, "year_published", value = year_range)
   })
 
 })
