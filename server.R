@@ -1,5 +1,6 @@
-library(shiny)
-library(leaflet)
+library("shiny")
+library("leaflet")
+library("DT")
 suppressMessages(library(dplyr))
 
 shinyServer(function(input, output, session) {
@@ -32,18 +33,20 @@ shinyServer(function(input, output, session) {
       group_by(location) %>%
       arrange(last_name) %>%
       summarise(n = n(),
-                book = paste(book, collapse = "</p><p>"),
                 lon = lon[1],
                 lat = lat[1])
   })
 
   output$map <- renderLeaflet({
     leaflet() %>%
-      addTiles() %>%
-      setView(lat = 37.45, lng = -93.85, zoom = 4)
+      addTiles(options = tileOptions(minZoom = 3)) %>%
+      setView(lat = 37.45, lng = -93.85, zoom = 4) %>%
+      setMaxBounds(-125.0011, 24.9493, -66.9326, 49.5904)
   })
 
-  output$bibtable <- renderDataTable({bib_for_table()}, server = FALSE)
+  output$bibtable <- renderDataTable({bib_for_table()},
+                                     server = FALSE, rownames = FALSE,
+                                     class = "display compact", style = "bootstrap")
 
   observe({
     df <- bib_for_map()
@@ -55,7 +58,7 @@ shinyServer(function(input, output, session) {
     if (nrow(df) > 0) {
       leafletProxy("map", data = df) %>%
         addCircleMarkers(layerId = ~location, lng = ~lon, lat = ~lat,
-                         radius = ~sqrt(n) * 3)
+                         radius = ~sqrt(n) * 4, color = "red", weight = 2)
     }
 
     if (nrow(df) == 1) {
