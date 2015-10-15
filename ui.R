@@ -1,25 +1,26 @@
 library(shiny)
 library(leaflet)
+library(DT)
 
-shinyUI(bootstrapPage(
-
-  tags$head(
-    tags$title(our_title),
-    tags$link(rel = "stylesheet", type = "text/css", href = "custom.css")
-  ),
-
-  leafletOutput("map", width = "100%", height = "100%"),
-
-  absolutePanel(
-    id = "controls",
-    bottom = 10, left = 10,
-    tags$h2(our_title),
-    sliderInput("year_published", "Year published",
-                min = year_range[1], max = year_range[2],
-                value = year_range, sep = "", round = TRUE, step = 1),
-    tags$p(tags$a(href = "http://peputz.blogspot.com/", "Paul Putz"),
-           " and ",
-           tags$a(href = "http://lincolnmullen.com", "Lincoln Mullen"))
-  )
+shinyUI(
+  fluidPage(
+    tags$head(tags$link(rel = "stylesheet", type = "text/css",
+                        href = "custom.css")),
+    titlePanel(our_title),
+    sidebarLayout(
+      sidebarPanel(
+        sliderInput("year_published", "Year published",
+                    min = year_range[1], max = year_range[2],
+                    value = year_range, sep = "", round = TRUE, step = 1),
+        selectInput("city_select", "City studied", cities),
+        includeHTML("explanation.html"),
+        width = 3
+      ),
+      mainPanel(
+        leafletOutput("map", width = "100%", height = "400px"),
+        tags$hr(),
+        dataTableOutput("bibtable")
+      )
+    )
   )
 )
