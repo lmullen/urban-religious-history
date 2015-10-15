@@ -1,23 +1,24 @@
 library(shiny)
+library(leaflet)
 
-shinyUI(fluidPage(
+shinyUI(bootstrapPage(
 
-  # Application title
-  titlePanel("Old Faithful Geyser Data"),
+  tags$head(
+    tags$link(rel = "stylesheet", type = "text/css", href = "custom.css")
+  ),
 
-  # Sidebar with a slider input for number of bins
-  sidebarLayout(
-    sidebarPanel(
-      sliderInput("bins",
-                  "Number of bins:",
-                  min = 1,
-                  max = 50,
-                  value = 30)
-    ),
+  leafletOutput("map", width = "100%", height = "100%"),
 
-    # Show a plot of the generated distribution
-    mainPanel(
-      plotOutput("distPlot")
-    )
+  absolutePanel(
+    id = "controls",
+    bottom = 10, left = 10,
+    tags$h2("A Bibliography of Urban Religious History"),
+    sliderInput("year_published", "Year published",
+                min = year_range[1], max = year_range[2],
+                value = year_range, sep = "", round = TRUE, step = 1),
+    tags$p(tags$a(href = "http://peputz.blogspot.com/", "Paul Putz"),
+           " and ",
+           tags$a(href = "http://lincolnmullen.com", "Lincoln Mullen"))
   )
-))
+  )
+)
