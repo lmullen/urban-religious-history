@@ -1,9 +1,10 @@
 library("shiny")
+library("shinythemes")
 library("leaflet")
 library("DT")
 
 shinyUI(
-  fluidPage(
+  fluidPage(theme = shinytheme("cosmo"),
     tags$head(tags$link(rel = "stylesheet", type = "text/css",
                         href = "custom.css")),
     headerPanel("A Bibliography of Urban American Religious History"),
@@ -14,8 +15,8 @@ shinyUI(
                     min = year_range[1], max = year_range[2],
                     value = year_range, sep = "", round = TRUE, step = 1),
         selectInput("city_select", "City studied", cities),
-        actionButton("reset_button", "Show all cities & years",
-                     icon = icon("repeat")),
+        actionButton("reset_button", "All cities & years",
+                     icon = icon("repeat"), class = "btn-warning btn-sm"),
         includeHTML("explanation.html"),
         width = 3
       ),

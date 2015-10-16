@@ -59,7 +59,8 @@ shinyServer(function(input, output, session) {
     if (nrow(df) > 0) {
       leafletProxy("map", data = df) %>%
         addCircleMarkers(layerId = ~location, lng = ~lon, lat = ~lat,
-                         radius = ~sqrt(n) * 4, color = "red", weight = 2)
+                         radius = ~sqrt(n) * 4, color = "#ff7518",
+                         fillOpacity = 0.4, weight = 2)
     }
 
     if (nrow(df) == 1) {
