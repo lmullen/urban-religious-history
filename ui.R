@@ -1,5 +1,6 @@
-library(shiny)
-library(leaflet)
+library("shiny")
+library("leaflet")
+library("DT")
 
 shinyUI(
   fluidPage(
@@ -21,7 +22,7 @@ shinyUI(
       mainPanel(
         leafletOutput("map", width = "100%", height = "400px"),
         tags$hr(),
-        dataTableOutput("bibtable")
+        DT::dataTableOutput("bibtable")
       )
     )
   )

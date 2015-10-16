@@ -44,9 +44,10 @@ shinyServer(function(input, output, session) {
       setMaxBounds(-125.0011, 24.9493, -66.9326, 49.5904)
   })
 
-  output$bibtable <- renderDataTable({bib_for_table()},
-                                     server = FALSE, rownames = FALSE,
-                                     class = "display compact", style = "bootstrap")
+  output$bibtable <- DT::renderDataTable({bib_for_table()},
+                                         server = FALSE, rownames = FALSE,
+                                         class = "display compact",
+                                         style = "bootstrap")
 
   observe({
     df <- bib_for_map()
