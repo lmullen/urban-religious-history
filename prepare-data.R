@@ -2,12 +2,8 @@ library("humaniformat")
 library("dplyr")
 library("ggmap")
 
-# format_book <- function(row) {
-#   paste0(row$full_name, ", ", "<em>", row$title, "</em>", " (", row$city, ": ",
-#          row$publisher, ", ", row$year, ").")
-# }
-
-bib <- read.csv("data/bibliography.csv", stringsAsFactors = FALSE)
+bib <- read.csv("data/Urban Religious Histories - Sheet1.csv",
+                stringsAsFactors = FALSE)
 names <- parse_names(bib$Author)
 bib <- bind_cols(names, bib)
 bib <- bib %>%
